@@ -1,6 +1,8 @@
 // 包的命名规则受 GroupConvetionAnnotation.groupPackagesPrefix
 package com.bj58.argo.controllers;
 
+import org.apache.log4j.Logger;
+
 import com.bj58.argo.ActionResult;
 import com.bj58.argo.BeatContext;
 import com.bj58.argo.annotations.POST;
@@ -14,19 +16,21 @@ import com.google.common.base.Strings;
 // 类的命名受 GroupConvetionAnnotation.controllerPattern约束
 public class HomeController extends AbstractController {
 
-    @Path("")
+    @Path("")//匹配根？？？？？
     public ActionResult home() {
 //        System.out.println(1);
         return view("index"); // velocity模板是 /src/main/java/resources/views/index.html
     }
 
-    @Path("post.html")
+    @Path("post.html")//匹配类型
     @POST  // 只处理post的请求
     public ActionResult postForm() {
 
         BeatContext beat = beat();
 
         ClientContext client = beat.getClient();
+        
+        System.out.println(client.getAddress());
 
         Preconditions.checkState(Strings.isNullOrEmpty(client.form("company")));
         Preconditions.checkState(Strings.isNullOrEmpty(client.form("address")));
@@ -46,7 +50,11 @@ public class HomeController extends AbstractController {
                 .add("phone", client.form("phone"))
                 .add("submit", client.form("submit"));
 
-
+        //test
+        Logger logger = Logger.getLogger(HomeController.class);
+        logger.info("this is 测试");
+        //
+        
         return view("post"); // resources/views/post.html velocity模板
 
     }
